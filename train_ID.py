@@ -145,4 +145,4 @@ for i in range(len(p)):
 
 print("Mean entropy:", np.mean(np.array(entropies)))
 
-np.save("entropies_ID.npy", entropies)
+np.save("entropy_ID.npy", entropies)
