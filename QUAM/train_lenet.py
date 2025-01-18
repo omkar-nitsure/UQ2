@@ -42,8 +42,8 @@ x = []
 y = []
 
 for i in range(n_shards):
-    x.append(np.load(f'cifar10/x_train/train_{i}.npz')['x_train'])
-    y.append(np.load(f'cifar10/x_train/train_{i}.npz')['y_train'])
+    x.append(np.load(f'../cifar10/x_train/train_{i}.npz')['x_train'])
+    y.append(np.load(f'../cifar10/x_train/train_{i}.npz')['y_train'])
 
 x = np.concatenate(x)
 y = np.concatenate(y)
@@ -83,4 +83,4 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=n_epochs
 
 model = train(model, train_loader, optimizer, scheduler, F.cross_entropy, n_epochs)
 
-torch.save(model.state_dict(), "lenet_250.pt")
+torch.save(model.state_dict(), "lenet_cifar.pt")

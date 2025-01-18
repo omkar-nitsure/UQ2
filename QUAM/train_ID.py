@@ -8,9 +8,8 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-import matplotlib.pyplot as plt
 
-gpu_idx = 7
+gpu_idx = 6
 device = torch.device(f"cuda:{gpu_idx}")
 
 n_shards = 10
@@ -18,8 +17,8 @@ x_train = []
 y_train = []
 
 for i in range(n_shards):
-    x_train.append(np.load(f'cifar10/x_train/train_{i}.npz')['x_train'])
-    y_train.append(np.load(f'cifar10/x_train/train_{i}.npz')['y_train'])
+    x_train.append(np.load(f'../cifar10/x_train/train_{i}.npz')['x_train'])
+    y_train.append(np.load(f'../cifar10/x_train/train_{i}.npz')['y_train'])
     
 x_train = np.concatenate(x_train)
 y_train = np.concatenate(y_train)
@@ -31,7 +30,7 @@ x_train = x_train.unsqueeze(1)
 x_train = x_train.to(device)
 y_train = y_train.to(device)
 
-x_test = np.load('mnist/test.npz')['x_test']
+x_test = np.load('../cifar10/test.npz')['x_test']
 x_test = torch.tensor(x_test).float()
 x_test = x_test.unsqueeze(1)
 x_test = x_test.to(device)
@@ -49,7 +48,7 @@ eta = 3
 ce = nn.CrossEntropyLoss()
 
 
-g_cpu = torch.Generator(device="cpu")
+g_cpu = torch.Generator(device=device)
 n_classes = 10
 weight_decay = 1e-3
 batch_size = 32
@@ -100,6 +99,7 @@ for a, l in product(range(adversaries), range(n_classes)):
     ):
 
         adversarial_network = copy.deepcopy(model)
+        adversarial_network.to(device)
         adversarial_network.train()
 
         opt = optim.Adam(params=adversarial_network.parameters(), lr=lr_adv, weight_decay=weight_decay)
@@ -145,4 +145,4 @@ for i in range(len(p)):
 
 print("Mean entropy:", np.mean(np.array(entropies)))
 
-np.save('entropy_OOD.npy', entropies)
+np.save("analysis_data/entropy_ID.npy", entropies)

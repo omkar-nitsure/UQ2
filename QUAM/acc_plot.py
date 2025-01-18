@@ -46,7 +46,7 @@ def predict(model, x):
         
     return y_pred
 
-x_test, y_test = np.load('cifar10/test.npz')['x_test'], np.load('cifar10/test.npz')['y_test']
+x_test, y_test = np.load('../cifar10/test.npz')['x_test'], np.load('../cifar10/test.npz')['y_test']
 
 x_test = torch.tensor(x_test).float()
 x_test = x_test.unsqueeze(1)
@@ -60,7 +60,7 @@ y_pred = y_pred.cpu().numpy()
 y_pred = np.argmax(y_pred, axis=1)
 y_test = np.argmax(y_test, axis=1)
 
-ei = np.load("entropies_ID.npy")
+ei = np.load("analysis_data/entropies_ID.npy")
 
 ei_idx = np.argsort(-ei)
 
